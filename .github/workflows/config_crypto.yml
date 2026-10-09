@@ -1,0 +1,30 @@
+name: Crypto Analysis
+
+# El evento workflow_dispatch habilita el botón para ejecutarlo manualmente
+on:
+  workflow_dispatch:
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest # Configura el entorno de Linux
+
+    steps:
+      # 1. Descarga el código de tu repositorio en el entorno de ejecución
+      - name: Commits realizados
+        uses: actions/checkout@v4
+
+      # 2. Instala y configura Python
+      - name: Ejecución de Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12' # Cambia esto a la versión que necesites (ej. 3.8, 3.10)
+
+      # 3. Actualiza pip e instala dependencias si existe el archivo requirements.txt
+      - name: Instalar dependencias
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+      # 4. Ejecuta tu script de prueba
+      - name: Ejecutar script
+        run: python tu_script.py # Reemplaza "tu_script.py" con el nombre real de tu archivo
