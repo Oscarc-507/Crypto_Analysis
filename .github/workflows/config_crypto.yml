@@ -1,30 +1,32 @@
-name: Crypto Analysis
+name: Reporte Diario de Cripto
 
-# El evento workflow_dispatch habilita el botón para ejecutarlo manualmente
 on:
-  workflow_dispatch:
+  schedule:
+    # Se ejecuta todos los días a las 14:00 UTC
+    # (Equivale a las 08:00 AM en el centro de México)
+    - cron: '0 00 * * *'
+  workflow_dispatch: # Te permite ejecutarlo manualmente con un botón
 
 jobs:
-  build-and-test:
-    runs-on: ubuntu-latest # Configura el entorno de Linux
+  ejecutar-script:
+    runs-on: ubuntu-latest
 
     steps:
-      # 1. Descarga el código de tu repositorio en el entorno de ejecución
-      - name: Commits realizados
-        uses: actions/checkout@v4
+    - name: Clonar el repositorio
+      uses: actions/checkout@v3
 
-      # 2. Instala y configura Python
-      - name: Ejecución de Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.12' # Cambia esto a la versión que necesites (ej. 3.8, 3.10)
+    - name: Configurar Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
 
-      # 3. Actualiza pip e instala dependencias si existe el archivo requirements.txt
-      - name: Instalar dependencias
-        run: |
-          python -m pip install --upgrade pip
-          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+    - name: Instalar librerías
+      run: |
+        pip install ccxt pandas requests
 
-      # 4. Ejecuta tu script de prueba
-      - name: Ejecutar script
-        run: python tu_script.py # Reemplaza "tu_script.py" con el nombre real de tu archivo
+    - name: Ejecutar el script
+      # Aquí le pasas variables secretas si usas un Bot de Telegram
+      #env: 
+        #TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+        #TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+      run: python scan.py
