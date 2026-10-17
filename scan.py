@@ -59,7 +59,7 @@ exchange = ccxt.kraken({
 })
 
 # Lista de tickers a analizar
-tickers = ["BTC", "ETH", "BNB", "XRP", "SOL", "ADA", "LTC", "BCH","AVAX", "CRV", "NEAR", "RUNE", "ETC", "ATOM"]
+tickers = ["BTC", "ETH", "BNB", "XRP", "SOL", "ADA", "LTC", "BCH","AVAX"]
 symbols = [f"{ticker}/USDT" for ticker in tickers]
 
 timeframe = '1d'  # 15m Velas de 4 horas (Corregido: faltaba la 'h')
@@ -155,7 +155,7 @@ if 'BTC' in df_precios.columns and not df_precios.empty:
     mejores_betas = tickers_ordenados[tickers_ordenados > umbral_beta]
 
     print(f"\nTickers filtrados con Beta > {umbral_beta} (Ideales para tendencias alcistas fuertes):")
-    display(mejores_betas)
+    #display(mejores_betas)
 else:
     print("\nNo se pudieron descargar los datos suficientes, o falta BTC. Revisa los errores de arriba.")
 
