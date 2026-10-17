@@ -204,7 +204,7 @@ if 'beta_df' in globals() and 'alpha_df' in globals():
     
     # Mostrar la tabla formateada
     print("TABLA DE ALPHAS, BETAS E INTERPRETACIÓN (Última vela en "+timeframe+").")
-    display(tabla_resumen)
+    #display(tabla_resumen)
 else:
     print("Por favor, ejecuta primero la celda anterior para generar 'alpha_df' y 'beta_df'. en %s",timeframe)
 
