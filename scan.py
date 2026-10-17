@@ -3,10 +3,6 @@ import pandas as pd
 import numpy as np
 import requests
 
-# Reemplaza estas variables con tus datos reales
-BOT_TOKEN = '8817038466:AAEZiz76v4RMCKwV_weVbKlSqnaklud2cNg'
-CHAT_ID = '1676706383'
-
 def enviar_tabla_telegram(tabla, tf):
     if tabla is None or tabla.empty:
         print("No hay datos para enviar.")
