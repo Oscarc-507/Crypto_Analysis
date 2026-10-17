@@ -154,10 +154,10 @@ if 'BTC' in df_precios.columns and not df_precios.empty:
     umbral_beta = 1.0
     mejores_betas = tickers_ordenados[tickers_ordenados > umbral_beta]
 
-    print(f"\nTickers filtrados con Beta > {umbral_beta} (Ideales para tendencias alcistas fuertes):")
+    #print(f"\nTickers filtrados con Beta > {umbral_beta} (Ideales para tendencias alcistas fuertes):")
     #display(mejores_betas)
 else:
-    print("\nNo se pudieron descargar los datos suficientes, o falta BTC. Revisa los errores de arriba.")
+    #print("\nNo se pudieron descargar los datos suficientes, o falta BTC. Revisa los errores de arriba.")
 
 # Verificar que existan las variables de resultados
 if 'beta_df' in globals() and 'alpha_df' in globals():
