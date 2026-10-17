@@ -16,21 +16,21 @@ def enviar_tabla_telegram():
     mensaje_lineas.append("```")
     mensaje_lineas.append(f"{'TICKER':<6} | {'BETA':<5} | {'ALPHA':<7}")
     mensaje_lineas.append("-" * 24)
-    
+
     # Agregar cada fila de la tabla redondeando los decimales para que quepa bien en móviles
     for ticker, row in tabla_resumen.iterrows():
         beta_val = f"{row['Beta']:.2f}"
         alpha_val = f"{row['Alpha']:.4f}"
         mensaje_lineas.append(f"{ticker:<6} | {beta_val:<5} | {alpha_val:<7}")
-    
+
     mensaje_lineas.append("```")
-    
+
     # Agregar un breve resumen interpretativo fuera del bloque de código para que sea legible
     mensaje_lineas.append("\n🔍 *Interpretación rápida:*")
     # Tomamos el top de mayor beta y el de mayor alpha para destacar en el mensaje
     top_beta = tabla_resumen['Beta'].idxmax()
     top_alpha = tabla_resumen['Alpha'].idxmax()
-    
+
     mensaje_lineas.append(f"🚀 *Más agresivo (Beta alto):* {top_beta} ({tabla_resumen.loc[top_beta, 'Beta']:.2f})")
     mensaje_lineas.append(f"💪 *Mayor fuerza relativa (Alpha alto):* {top_alpha} ({tabla_resumen.loc[top_alpha, 'Alpha']:.4f})")
 
@@ -59,7 +59,7 @@ exchange = ccxt.kraken({
 })
 
 # Lista de tickers a analizar
-tickers = ["BTC", "ETH", "BNB", "XRP", "SOL", "ADA", "LTC", "BCH","AVAX"]
+tickers = ["BTC", "ETH", "BNB", "XRP", "SOL", "ADA", "LTC", "BCH","AVAX", "CRV", "NEAR", "RUNE", "ETC", "ATOM"]
 symbols = [f"{ticker}/USDT" for ticker in tickers]
 
 timeframe = '1d'  # 15m Velas de 4 horas (Corregido: faltaba la 'h')
@@ -154,24 +154,28 @@ if 'BTC' in df_precios.columns and not df_precios.empty:
     umbral_beta = 1.0
     mejores_betas = tickers_ordenados[tickers_ordenados > umbral_beta]
 
+    print(f"\nTickers filtrados con Beta > {umbral_beta} (Ideales para tendencias alcistas fuertes):")
+    #display(mejores_betas)
+else:
+    print("\nNo se pudieron descargar los datos suficientes, o falta BTC. Revisa los errores de arriba.")
 
 # Verificar que existan las variables de resultados
 if 'beta_df' in globals() and 'alpha_df' in globals():
     # Obtener el último valor (el más reciente) de Beta y Alpha para cada moneda
     ultimos_betas = beta_df.iloc[-1]
     ultimos_alphas = alpha_df.iloc[-1]
-    
+
     # Crear el DataFrame resumido
     tabla_resumen = pd.DataFrame({
         'Beta': ultimos_betas,
         'Alpha': ultimos_alphas
     })
-    
+
     # Definir una función para generar la interpretación de cada métrica
     def interpretar_metricas(row):
         beta = row['Beta']
         alpha = row['Alpha']
-        
+
         # Interpretación de Beta
         if beta > 1.2:
             desc_beta = "Muy Volátil / Agresivo (Sigue a BTC con fuerza)"
@@ -181,7 +185,7 @@ if 'beta_df' in globals() and 'alpha_df' in globals():
             desc_beta = "Defensivo (Menos sensible a movimientos de BTC)"
         else:
             desc_beta = "Inverso (Se mueve en dirección opuesta a BTC)"
-            
+
         # Interpretación de Alpha
         if alpha > 0.001:
             desc_alpha = "Rendimiento Excedente Fuerte (Fuerza Relativa)"
@@ -189,15 +193,20 @@ if 'beta_df' in globals() and 'alpha_df' in globals():
             desc_alpha = "Subrendimiento Fuerte (Debilidad Relativa)"
         else:
             desc_alpha = "Neutral / Estable"
-            
+
         return f"Beta: {desc_beta} | Alpha: {desc_alpha}"
 
     # Aplicar la función para crear la columna de interpretación
     tabla_resumen['Interpretación'] = tabla_resumen.apply(interpretar_metricas, axis=1)
-    
+
     # Ordenar por Beta descendente
     tabla_resumen = tabla_resumen.sort_values(by='Beta', ascending=False)
-    
+
+    # Mostrar la tabla formateada
+    print("TABLA DE ALPHAS, BETAS E INTERPRETACIÓN (Última vela en "+timeframe+").")
+    #display(tabla_resumen)
+else:
+    print("Por favor, ejecuta primero la celda anterior para generar 'alpha_df' y 'beta_df'. en %s",timeframe)
 
 # Ejecutar el envío
 enviar_tabla_telegram()
