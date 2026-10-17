@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 import requests
 
+
 def enviar_tabla_telegram():
     # Verificar que la tabla_resumen exista
     if 'tabla_resumen' not in globals() or tabla_resumen.empty:
@@ -53,13 +54,15 @@ def enviar_tabla_telegram():
     except Exception as e:
         print(f"Error al enviar la tabla a Telegram: {e}")
         return None
+
+
 # Usamos Kraken configurado
 exchange = ccxt.kraken({
     'enableRateLimit': True,
 })
 
 # Lista de tickers a analizar
-tickers = ["BTC", "ETH", "BNB", "XRP", "SOL", "ADA", "LTC", "BCH","AVAX", "CRV", "NEAR", "RUNE", "ETC", "ATOM"]
+tickers = ["BTC", "ETH", "BNB", "XRP", "SOL", "ADA", "LTC", "BCH", "AVAX"]
 symbols = [f"{ticker}/USDT" for ticker in tickers]
 
 timeframe = '1d'  # 15m Velas de 4 horas (Corregido: faltaba la 'h')
@@ -88,6 +91,7 @@ for symbol in symbols:
 
 # Eliminar cualquier fila que tenga valores nulos por desajustes de tiempo
 df_precios.dropna(inplace=True)
+
 
 def calcular_alpha_beta_eficiente(df_precios, ventana):
     """
@@ -140,6 +144,7 @@ def calcular_alpha_beta_eficiente(df_precios, ventana):
 
     return resultados_alpha, resultados_beta
 
+
 # Verificamos que tengamos la columna BTC y datos antes de calcular
 if 'BTC' in df_precios.columns and not df_precios.empty:
     alpha_df, beta_df = calcular_alpha_beta_eficiente(df_precios, 50)
@@ -154,9 +159,10 @@ if 'BTC' in df_precios.columns and not df_precios.empty:
     umbral_beta = 1.0
     mejores_betas = tickers_ordenados[tickers_ordenados > umbral_beta]
 
-    print(f"\nTickers filtrados con Beta > {umbral_beta} (Ideales para tendencias alcistas fuertes):")
-    #display(mejores_betas)
+    # print(f"\nTickers filtrados con Beta > {umbral_beta} (Ideales para tendencias alcistas fuertes):")
+    # display(mejores_betas)
 else:
+    # Evitar bloque else vacío que causa IndentationError en Python
     print("\nNo se pudieron descargar los datos suficientes, o falta BTC. Revisa los errores de arriba.")
 
 # Verificar que existan las variables de resultados
@@ -203,10 +209,10 @@ if 'beta_df' in globals() and 'alpha_df' in globals():
     tabla_resumen = tabla_resumen.sort_values(by='Beta', ascending=False)
 
     # Mostrar la tabla formateada
-    print("TABLA DE ALPHAS, BETAS E INTERPRETACIÓN (Última vela en "+timeframe+").")
-    #display(tabla_resumen)
+    print("TABLA DE ALPHAS, BETAS E INTERPRETACIÓN (Última vela en " + timeframe + ").")
+    # display(tabla_resumen)
 else:
-    print("Por favor, ejecuta primero la celda anterior para generar 'alpha_df' y 'beta_df'. en %s",timeframe)
+    print("Por favor, ejecuta primero la celda anterior para generar 'alpha_df' y 'beta_df'. en %s", timeframe)
 
 # Ejecutar el envío
 enviar_tabla_telegram()
