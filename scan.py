@@ -2,6 +2,10 @@ import ccxt
 import pandas as pd
 import numpy as np
 import requests
+import os
+
+api_key = os.environ.get('API_KEY')
+api_secret = os.environ.get('API_SECRET')
 
 def enviar_tabla_telegram(tabla, tf):
     if tabla is None or tabla.empty:
