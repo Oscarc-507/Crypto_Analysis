@@ -99,7 +99,7 @@ if 'BTC' in df_precios.columns and not df_precios.empty:
     ultimos_betas = beta_df.iloc[-1].dropna()
     mejores_betas = ultimos_betas[ultimos_betas > 1.0].sort_values(ascending=False)
     print(f"\nTickers con Beta > 1.0:")
-    display(mejores_betas)
+    #display(mejores_betas)
 
     tabla_resumen = pd.DataFrame({
         'Beta': ultimos_betas,
@@ -115,7 +115,7 @@ if 'BTC' in df_precios.columns and not df_precios.empty:
     tabla_resumen['Interpretación'] = tabla_resumen.apply(interpretar, axis=1)
 
     print(f"\nTABLA DE ALPHAS Y BETAS ({timeframe}):")
-    display(tabla_resumen)
+    #display(tabla_resumen)
     enviar_tabla_telegram(tabla_resumen, timeframe)
 else:
     print("\nDatos insuficientes para el análisis.")
