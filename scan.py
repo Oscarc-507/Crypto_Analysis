@@ -4,8 +4,8 @@ import numpy as np
 import requests
 import os
 
-api_key = os.environ.get('API_KEY')
-api_secret = os.environ.get('API_SECRET')
+BOT_TOKEN = os.environ.get('BOT_TOKEN')
+CHAT_ID = os.environ.get('CHAT_ID')
 
 def enviar_tabla_telegram(tabla, tf):
     if tabla is None or tabla.empty:
