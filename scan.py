@@ -50,7 +50,7 @@ def enviar_tabla_telegram(tabla, tf):
 
 # Descarga de datos
 exchange = ccxt.kraken({'enableRateLimit': True})
-tickers = ["BTC", "ETH", "BNB", "XRP", "SOL", "ADA", "LTC", "BCH","AVAX", "CRV", "NEAR", "RUNE", "ETC", "ATOM"]
+tickers = ["BTC", "ETH", "BNB", "XRP", "SOL", "ADA", "LTC", "BCH","AVAX"]
 symbols = [f"{ticker}/USDT" for ticker in tickers]
 timeframe = '1d'
 limit = 150
